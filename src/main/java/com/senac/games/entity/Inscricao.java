@@ -14,6 +14,18 @@ public class Inscricao {
     @Column(name = "inscricao_id")
     private int id;
 
+    @Column(name = "inscricao_data")
+    private LocalDateTime data;
+
+    @Column(name = "inscricao_status")
+    private int status;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "participante_id", nullable = false)
+    private Participante participante;
+
+
     public int getId() {
         return id;
     }
@@ -46,16 +58,6 @@ public class Inscricao {
         this.participante = participante;
     }
 
-    @Column(name = "inscricao_data")
-    private LocalDateTime data;
-
-    @Column(name = "inscricao_status")
-    private int status;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "participante_id", nullable = false)
-    private Participante participante;
 
 
 

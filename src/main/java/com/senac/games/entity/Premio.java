@@ -11,6 +11,18 @@ public class Premio {
     @Column(name="premio_id")
     private int id;
 
+    @Column(name="premio_descricao")
+    private String descricao;
+
+    @Column(name="premio_ordem_premiacao")
+    private int ordem_premiacao;
+
+    @Column(name="premio_categoria")
+    private int categoria;
+
+    @Column(name="premio_status")
+    private int  status;
+
     public int getId() {
         return id;
     }
@@ -51,16 +63,6 @@ public class Premio {
         this.status = status;
     }
 
-    @Column(name="premio_descricao")
-    private String descricao;
 
-    @Column(name="premio_ordem_premiacao")
-    private int ordem_premiacao;
-
-    @Column(name="premio_categoria")
-    private int categoria;
-
-    @Column(name="premio_status")
-    private int  status;
 
 }
