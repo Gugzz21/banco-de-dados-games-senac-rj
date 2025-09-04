@@ -29,7 +29,7 @@ public class ParticipanteService {
 
     }
 
-    public Participante listarPorParticipantId(Integer participanteId) {
+    public Participante obterParticipantePeloId(Integer participanteId) {
         return this.participanteRepository.findById(participanteId).orElse(null);
     }
 
@@ -61,7 +61,7 @@ public class ParticipanteService {
 
     public ParticipanteDTOResponse atualizarParticipante(Integer participanteId, ParticipanteDTORequest participanteDTORequest) {
         //Antes de atualizar busca se existe o registro a ser atualizado
-        Participante participante = this.listarPorParticipantId(participanteId);
+        Participante participante = this.obterParticipantePeloId(participanteId);
         //Se encontra o registro a ser atualizado
         if (participante != null) {
             //copia os dados a serem atualizados do DTO de entrada para um objeto do tipo participante
@@ -79,7 +79,7 @@ public class ParticipanteService {
     }
 
     public ParticipanteDTOUpdateResponse atualizarStatusParticipante(Integer participanteId, ParticipanteDTORequest participanteDTOUpdateRequest) {
-        Participante participante = this.listarPorParticipantId(participanteId);
+        Participante participante = this.obterParticipantePeloId(participanteId);
         if(participante != null) {
             participante.setStatus(participanteDTOUpdateRequest.getStatus());
 
@@ -89,8 +89,12 @@ public class ParticipanteService {
         }
         else {return null;}
 
-
-
     }
+
+    public void apagarParticipantePorId(Integer participanteId) {
+        participanteRepository.apagarParticipantePorId(participanteId);
+    }
+
+
 
 }

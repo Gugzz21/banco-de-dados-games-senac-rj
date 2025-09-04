@@ -37,7 +37,7 @@ public class ParticipanteController {
     @Operation(summary = "Listar participante pelo id de participante", description = "Endpoint para participante pela id de participante")
     public ResponseEntity<Participante> listarPorParticipantId(
             @PathVariable("participanteId") Integer participanteId) {
-        Participante participante = participanteService.listarPorParticipantId(participanteId);
+        Participante participante = participanteService.obterParticipantePeloId(participanteId);
         if (participante == null){
             return ResponseEntity.noContent().build();
         }
@@ -54,7 +54,7 @@ public class ParticipanteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(participanteService.criarParticipante(participante));
     }
 
-    @PutMapping("/atualizar/{participante_id}")
+    @PutMapping("/atualizarStatus/{participanteId}")
     @Operation(summary = "Atualizar todos os dados do participante", description = "Endpoint para atualizar o registro do participante")
     public ResponseEntity<ParticipanteDTOResponse> atualizarParticipante(
             @PathVariable("participanteId") Integer participanteId,
@@ -66,7 +66,17 @@ public class ParticipanteController {
     @PatchMapping("/atualizarStatus/{participanteId")
     @Operation(summary = "Atualizar campo status do participante", description = "Endpoint para atualizar o status do participante")
     public ResponseEntity<ParticipanteDTOUpdateResponse> atualizarStatusParticipante(
+            @Valid
             @PathVariable("participanteId") Integer participanteId,
             @RequestBody ParticipanteDTORequest participanteDTOUpdateRequest
     ){return ResponseEntity.ok(participanteService.atualizarStatusParticipante(participanteId, participanteDTOUpdateRequest));}
+
+
+    @DeleteMapping("/apagar/{participanteId}")
+    @Operation(summary = "Apagar registro de participante", description = "Endpoint para apagar um participante pelo Id")
+    public ResponseEntity apagarParticipante(@PathVariable("participanteId") Integer participanteId){
+        participanteService.apagarParticipantePorId(participanteId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
