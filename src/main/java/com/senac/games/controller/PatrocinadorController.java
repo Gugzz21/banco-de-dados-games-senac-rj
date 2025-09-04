@@ -72,6 +72,7 @@ public class PatrocinadorController {
     public ResponseEntity apagarPatrocinador(@PathVariable("patrocinadorId") Integer patrocinadorId){
         patrocinadorService.apagarPatrocinador(patrocinadorId);
         return ResponseEntity.noContent().build();
+
     }
 
 
