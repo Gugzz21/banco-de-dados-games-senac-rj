@@ -54,7 +54,7 @@ public class ParticipanteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(participanteService.criarParticipante(participante));
     }
 
-    @PutMapping("/atualizarStatus/{participanteId}")
+    @PutMapping("/atualizarDados/{participanteId}")
     @Operation(summary = "Atualizar todos os dados do participante", description = "Endpoint para atualizar o registro do participante")
     public ResponseEntity<ParticipanteDTOResponse> atualizarParticipante(
             @PathVariable("participanteId") Integer participanteId,
@@ -63,7 +63,7 @@ public class ParticipanteController {
         return ResponseEntity.ok(participanteService.atualizarParticipante(participanteId, participanteDTORequest));
     }
 
-    @PatchMapping("/atualizarStatus/{participanteId")
+    @PatchMapping("/atualizarStatus/{participanteId}")
     @Operation(summary = "Atualizar campo status do participante", description = "Endpoint para atualizar o status do participante")
     public ResponseEntity<ParticipanteDTOUpdateResponse> atualizarStatusParticipante(
             @Valid
@@ -75,7 +75,7 @@ public class ParticipanteController {
     @DeleteMapping("/apagar/{participanteId}")
     @Operation(summary = "Apagar registro de participante", description = "Endpoint para apagar um participante pelo Id")
     public ResponseEntity apagarParticipante(@PathVariable("participanteId") Integer participanteId){
-        participanteService.apagarParticipantePorId(participanteId);
+        participanteService.apagarParticipante(participanteId);
         return ResponseEntity.noContent().build();
     }
 

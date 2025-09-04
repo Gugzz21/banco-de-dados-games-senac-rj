@@ -24,13 +24,12 @@ public class ParticipanteService {
     }
 
     public List<Participante> listarParticipantes() {
-        return this.participanteRepository.findAll();
-
+        return this.participanteRepository.listarParticipantes();
 
     }
 
     public Participante obterParticipantePeloId(Integer participanteId) {
-        return this.participanteRepository.findById(participanteId).orElse(null);
+        return this.participanteRepository.obterParticipantePeloId(participanteId);
     }
 
     public ParticipanteDTOResponse criarParticipante(ParticipanteDTORequest participanteDTORequest) {
@@ -91,10 +90,8 @@ public class ParticipanteService {
 
     }
 
-    public void apagarParticipantePorId(Integer participanteId) {
-        participanteRepository.apagarParticipantePorId(participanteId);
+
+    public void apagarParticipante(Integer participanteId) {
+        participanteRepository.apagadoLogicoParticipante(participanteId);
     }
-
-
-
 }
