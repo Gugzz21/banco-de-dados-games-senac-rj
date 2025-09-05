@@ -5,6 +5,16 @@ public class JogoDTORequest {
 
     private int status;
 
+    private int categoriaId;
+
+    public int getCategoriaId() {
+        return categoriaId;
+    }
+
+    public void setCategoriaId(int categoriaId) {
+        this.categoriaId = categoriaId;
+    }
+
     public String getNome() {
         return nome;
     }

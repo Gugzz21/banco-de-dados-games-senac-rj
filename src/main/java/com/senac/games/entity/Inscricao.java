@@ -26,6 +26,8 @@ public class Inscricao {
     private Participante participante;
 
 
+
+
     public int getId() {
         return id;
     }
