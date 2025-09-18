@@ -4,28 +4,23 @@ import com.senac.games.dto.request.CategoriaDTORequest;
 import com.senac.games.dto.response.CategoriaDTOResponse;
 import com.senac.games.dto.response.CategoriaDTOUpdateResponse;
 import com.senac.games.entity.Categoria;
-import com.senac.games.entity.Categoria;
-import com.senac.games.repository.CategoriaRepository;
 import com.senac.games.repository.CategoriaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class CategoriaService {
 
-    private CategoriaRepository categoriaRepository;
+    private final CategoriaRepository categoriaRepository;
 
     @Autowired
     private ModelMapper modelmapper;
 
-    public CategoriaService(CategoriaRepository categoriaRepository) {
+    public CategoriaService(CategoriaRepository categoriaRepository, ModelMapper modelmapper) {
         this.categoriaRepository = categoriaRepository;
-    }
-
-    public CategoriaService() {
+        this.modelmapper = modelmapper;
     }
 
     public List<Categoria> listarCategorias() {
@@ -39,36 +34,28 @@ public class CategoriaService {
     public CategoriaDTOResponse criarCategoria(CategoriaDTORequest categoriaDTORequest) {
         Categoria categoria = modelmapper.map(categoriaDTORequest, Categoria.class);
         Categoria categoriaSave = this.categoriaRepository.save(categoria);
-        CategoriaDTOResponse categoriaDTOResponse = modelmapper.map(categoriaSave, CategoriaDTOResponse.class);
-        return categoriaDTOResponse;
-
+        return modelmapper.map(categoriaSave, CategoriaDTOResponse.class);
     }
 
     public CategoriaDTOResponse atualizarCategoria(Integer categoriaId, CategoriaDTORequest categoriaDTORequest) {
         Categoria categoria = this.obtercategoriaPeloId(categoriaId);
         if (categoria != null) {
-            modelmapper.map(categoriaDTORequest, Categoria.class);
+            modelmapper.map(categoriaDTORequest, categoria);
             Categoria tempResponse = categoriaRepository.save(categoria);
             return modelmapper.map(tempResponse, CategoriaDTOResponse.class);
-        } else {
-            return null;
         }
-
+        return null;
     }
 
     public CategoriaDTOUpdateResponse atualizarStatusCategoria(Integer categoriaId, CategoriaDTORequest categoriaDTOUpdateRequest) {
         Categoria categoria = this.obtercategoriaPeloId(categoriaId);
-        if(categoria != null) {
+        if (categoria != null) {
             categoria.setStatus(categoriaDTOUpdateRequest.getStatus());
-
-            Categoria tempReponse = categoriaRepository.save(categoria);
-
-            return modelmapper.map(tempReponse, CategoriaDTOUpdateResponse.class);
+            Categoria tempResponse = categoriaRepository.save(categoria);
+            return modelmapper.map(tempResponse, CategoriaDTOUpdateResponse.class);
         }
-        else {return null;}
-
+        return null;
     }
-
 
     public void apagarCategoria(Integer categoriaId) {
         categoriaRepository.apagadoLogicoCategoria(categoriaId);

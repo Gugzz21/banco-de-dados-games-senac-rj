@@ -65,7 +65,12 @@ public class PatrocinadorController {
             @Valid
             @PathVariable("patrocinadorId") Integer patrocinadorId,
             @RequestBody PatrocinadorDTORequest patrocinadorDTOUpdateRequest
-    ){return ResponseEntity.ok(patrocinadorService.atualizarStatusPartrocinador(patrocinadorId, patrocinadorDTOUpdateRequest));
+    ){
+        // Change this line:
+        // return ResponseEntity.ok(patrocinadorService.atualizarStatusPartrocinador(patrocinadorId, patrocinadorDTOUpdateRequest));
+
+        // To this line:
+        return ResponseEntity.ok(patrocinadorService.atualizarStatusPatrocinador(patrocinadorId, patrocinadorDTOUpdateRequest));
     }
     @DeleteMapping("/apagar/{patrocinadorId}")
     @Operation(summary = "Apagar registro de patrocinador", description = "Endpoint para apagar um patrocinador pelo Id")

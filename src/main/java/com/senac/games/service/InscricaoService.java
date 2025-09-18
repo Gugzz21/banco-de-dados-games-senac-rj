@@ -4,27 +4,23 @@ import com.senac.games.dto.request.InscricaoDTORequest;
 import com.senac.games.dto.response.InscricaoDTOResponse;
 import com.senac.games.dto.response.InscricaoDTOUpdateResponse;
 import com.senac.games.entity.Inscricao;
-import com.senac.games.entity.Inscricao;
-import com.senac.games.repository.InscricaoRepository;
 import com.senac.games.repository.InscricaoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class InscricaoService {
-    private InscricaoRepository inscricaoRepository;
+
+    private final InscricaoRepository inscricaoRepository;
 
     @Autowired
     private ModelMapper modelmapper;
 
-    public InscricaoService(InscricaoRepository inscricaoRepository) {
+    public InscricaoService(InscricaoRepository inscricaoRepository, ModelMapper modelmapper) {
         this.inscricaoRepository = inscricaoRepository;
-    }
-
-    public InscricaoService() {
+        this.modelmapper = modelmapper;
     }
 
     public List<Inscricao> listarInscricoes() {
@@ -38,39 +34,30 @@ public class InscricaoService {
     public InscricaoDTOResponse criarInscricao(InscricaoDTORequest inscricaoDTORequest) {
         Inscricao inscricao = modelmapper.map(inscricaoDTORequest, Inscricao.class);
         Inscricao inscricaoSave = this.inscricaoRepository.save(inscricao);
-        InscricaoDTOResponse inscricaoDTOResponse = modelmapper.map(inscricaoSave, InscricaoDTOResponse.class);
-        return inscricaoDTOResponse;
-
+        return modelmapper.map(inscricaoSave, InscricaoDTOResponse.class);
     }
 
     public InscricaoDTOResponse atualizarInscricao(Integer inscricaoId, InscricaoDTORequest inscricaoDTORequest) {
         Inscricao inscricao = this.obterinscricaoPeloId(inscricaoId);
         if (inscricao != null) {
-            modelmapper.map(inscricaoDTORequest, Inscricao.class);
+            modelmapper.map(inscricaoDTORequest, inscricao);
             Inscricao tempResponse = inscricaoRepository.save(inscricao);
             return modelmapper.map(tempResponse, InscricaoDTOResponse.class);
-        } else {
-            return null;
         }
-
+        return null;
     }
 
     public InscricaoDTOUpdateResponse atualizarStatusInscricao(Integer inscricaoId, InscricaoDTORequest inscricaoDTOUpdateRequest) {
         Inscricao inscricao = this.obterinscricaoPeloId(inscricaoId);
-        if(inscricao != null) {
+        if (inscricao != null) {
             inscricao.setStatus(inscricaoDTOUpdateRequest.getStatus());
-
-            Inscricao tempReponse = inscricaoRepository.save(inscricao);
-
-            return modelmapper.map(tempReponse, InscricaoDTOUpdateResponse.class);
+            Inscricao tempResponse = inscricaoRepository.save(inscricao);
+            return modelmapper.map(tempResponse, InscricaoDTOUpdateResponse.class);
         }
-        else {return null;}
-
+        return null;
     }
-
 
     public void apagarInscricao(Integer inscricaoId) {
         inscricaoRepository.apagadoLogicoInscricao(inscricaoId);
     }
-
 }
