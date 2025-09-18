@@ -10,21 +10,24 @@ public class Jogo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="jogo_id")
-    private int id;
+    private Integer id; // Mude de 'int' para 'Integer'
+
     @Column(name = "jogo_nome")
     private String nome;
+
     @Column(name = "jogo_status")
     private int status;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

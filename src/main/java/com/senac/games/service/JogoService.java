@@ -1,6 +1,5 @@
 package com.senac.games.service;
 
-import com.senac.games.dto.JogoDTO;
 import com.senac.games.dto.request.JogoDTORequest;
 import com.senac.games.dto.response.JogoDTOResponse;
 import com.senac.games.dto.response.JogoDTOUpdateResponse;
@@ -38,8 +37,12 @@ public class JogoService {
         return this.jogoRepository.obterJogoPeloId(jogoId);
     }
 
+    @Transactional
     public JogoDTOResponse criarJogo(JogoDTORequest jogoDTORequest) {
         Jogo jogo = modelmapper.map(jogoDTORequest, Jogo.class);
+
+        // Garante que o ID é nulo para que o Hibernate realize um INSERT
+        jogo.setId(null);
 
         Categoria categoria = categoriaRepository.findById(jogoDTORequest.getCategoriaId())
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o ID: " + jogoDTORequest.getCategoriaId()));
@@ -48,37 +51,7 @@ public class JogoService {
 
         Jogo jogoSalvo = this.jogoRepository.save(jogo);
 
-        JogoDTOResponse jogoDTOResponse = modelmapper.map(jogoSalvo, JogoDTOResponse.class);
-        return jogoDTOResponse;
-    }
-
-
-//    public JogoDTOResponse atualizarJogo(Integer jogoId, JogoDTORequest jogoDTORequest) {
-//        Jogo jogo = this.obterjogoPeloId(jogoId);
-//        if (jogo != null) {
-//            modelmapper.map(jogoDTORequest, jogo);
-//            Jogo tempResponse = jogoRepository.save(jogo);
-//            return modelmapper.map(tempResponse, JogoDTOResponse.class);
-//        } else {
-//            return null;
-//        }
-//    }
-
-    public JogoDTOUpdateResponse atualizarStatusJogo(Integer jogoId, JogoDTORequest jogoDTOUpdateRequest) {
-        Jogo jogo = this.obterjogoPeloId(jogoId);
-        if (jogo != null) {
-            jogo.setStatus(jogoDTOUpdateRequest.getStatus());
-
-            Jogo tempReponse = jogoRepository.save(jogo);
-
-            return modelmapper.map(tempReponse, JogoDTOUpdateResponse.class);
-        } else {
-            return null;
-        }
-    }
-
-    public void apagarJogo(Integer jogoId) {
-        jogoRepository.apagadoLogicoJogo(jogoId);
+        return modelmapper.map(jogoSalvo, JogoDTOResponse.class);
     }
 
     @Transactional
@@ -86,8 +59,12 @@ public class JogoService {
         Jogo jogo = jogoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Jogo com id: " + id + " não encontrado"));
 
-        jogo.setNome(jogoDTORequest.getNome());
-        jogo.setStatus(jogoDTORequest.getStatus());
+        // Configura o ModelMapper para ignorar o ID durante o mapeamento
+        modelmapper.typeMap(JogoDTORequest.class, Jogo.class)
+                .addMappings(mapper -> mapper.skip(Jogo::setId));
+
+        // Mapeia os dados do DTO para a entidade, atualizando os campos exceto o ID
+        modelmapper.map(jogoDTORequest, jogo);
 
         if (jogoDTORequest.getCategoriaId() != 0) {
             Categoria categoria = categoriaRepository.findById(jogoDTORequest.getCategoriaId())
@@ -98,5 +75,18 @@ public class JogoService {
         Jogo jogoAtualizado = jogoRepository.save(jogo);
 
         return modelmapper.map(jogoAtualizado, JogoDTOResponse.class);
+    }
+    public JogoDTOUpdateResponse atualizarStatusJogo(Integer jogoId, JogoDTORequest jogoDTOUpdateRequest) {
+        Jogo jogo = this.obterjogoPeloId(jogoId);
+        if (jogo != null) {
+            jogo.setStatus(jogoDTOUpdateRequest.getStatus());
+            Jogo tempResponse = jogoRepository.save(jogo);
+            return modelmapper.map(tempResponse, JogoDTOUpdateResponse.class);
+        }
+        return null;
+    }
+
+    public void apagarJogo(Integer jogoId) {
+        jogoRepository.apagadoLogicoJogo(jogoId);
     }
 }
