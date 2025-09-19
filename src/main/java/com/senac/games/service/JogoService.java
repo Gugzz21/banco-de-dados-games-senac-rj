@@ -20,6 +20,8 @@ public class JogoService {
 
     private final JogoRepository jogoRepository;
     private final CategoriaRepository categoriaRepository;
+
+    @Autowired
     private final ModelMapper modelmapper;
 
     @Autowired
@@ -40,12 +42,10 @@ public class JogoService {
     @Transactional
     public JogoDTOResponse criarJogo(JogoDTORequest jogoDTORequest) {
         Jogo jogo = modelmapper.map(jogoDTORequest, Jogo.class);
-
-        // Garante que o ID é nulo para que o Hibernate realize um INSERT
         jogo.setId(null);
 
-        Categoria categoria = categoriaRepository.findById(jogoDTORequest.getCategoriaId())
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o ID: " + jogoDTORequest.getCategoriaId()));
+        Categoria categoria = categoriaRepository.findById(jogoDTORequest.getIdCategoria())
+                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o ID: " + jogoDTORequest.getIdCategoria()));
 
         jogo.setCategoria(categoria);
 
@@ -56,23 +56,24 @@ public class JogoService {
 
     @Transactional
     public JogoDTOResponse atualizarJogo(Integer id, JogoDTORequest jogoDTORequest) {
-        Jogo jogo = jogoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Jogo com id: " + id + " não encontrado"));
 
-        // Configura o ModelMapper para ignorar o ID durante o mapeamento
-        modelmapper.typeMap(JogoDTORequest.class, Jogo.class)
-                .addMappings(mapper -> mapper.skip(Jogo::setId));
+        Jogo jogoExistente = jogoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Jogo com id: " + id + " não encontrado."));
 
-        // Mapeia os dados do DTO para a entidade, atualizando os campos exceto o ID
-        modelmapper.map(jogoDTORequest, jogo);
 
-        if (jogoDTORequest.getCategoriaId() != 0) {
-            Categoria categoria = categoriaRepository.findById(jogoDTORequest.getCategoriaId())
-                    .orElseThrow(() -> new IllegalArgumentException("Categoria não encontrada com id: " + jogoDTORequest.getCategoriaId()));
-            jogo.setCategoria(categoria);
+        jogoExistente.setNome(jogoDTORequest.getNome());
+        jogoExistente.setStatus(jogoDTORequest.getStatus());
+
+
+        if (jogoDTORequest.getIdCategoria() != null && jogoDTORequest.getIdCategoria() != 0) {
+            Categoria categoria = categoriaRepository.findById(jogoDTORequest.getIdCategoria())
+                    .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o ID: " + jogoDTORequest.getIdCategoria()));
+            jogoExistente.setCategoria(categoria);
         }
 
-        Jogo jogoAtualizado = jogoRepository.save(jogo);
+
+        Jogo jogoAtualizado = jogoRepository.save(jogoExistente);
+
 
         return modelmapper.map(jogoAtualizado, JogoDTOResponse.class);
     }

@@ -1,17 +1,27 @@
 package com.senac.games.dto.response;
 
 public class JogoDTOResponse {
-    private int id;
+    private Integer id;
 
     private String nome;
 
-    private int status;
+    private Integer status;
 
-    public int getId() {
+    private Integer idCategoria;
+
+    public Integer getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(Integer idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -23,11 +33,11 @@ public class JogoDTOResponse {
         this.nome = nome;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }
