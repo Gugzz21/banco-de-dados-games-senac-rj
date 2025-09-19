@@ -9,6 +9,16 @@ public class JogoDTOResponse {
 
     private Integer idCategoria;
 
+    private Integer jogoId;
+
+    public Integer getJogoId() {
+        return jogoId;
+    }
+
+    public void setJogoId(Integer jogoId) {
+        this.jogoId = jogoId;
+    }
+
     public Integer getIdCategoria() {
         return idCategoria;
     }

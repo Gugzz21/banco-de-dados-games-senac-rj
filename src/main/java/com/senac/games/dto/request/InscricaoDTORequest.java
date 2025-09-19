@@ -7,6 +7,17 @@ public class InscricaoDTORequest {
 
     private int status;
 
+    private Integer idParticipante;
+    private Integer jogoId;
+
+    public Integer getJogoId() {
+        return jogoId;
+    }
+
+    public void setJogoId(Integer jogoId) {
+        this.jogoId = jogoId;
+    }
+
     public LocalDateTime getData() {
         return data;
     }
@@ -21,5 +32,13 @@ public class InscricaoDTORequest {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public Integer getIdParticipante() {
+        return idParticipante;
+    }
+
+    public void setIdParticipante(Integer idParticipante) {
+        this.idParticipante = idParticipante;
     }
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "inscricao")
@@ -12,7 +11,7 @@ public class Inscricao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inscricao_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "inscricao_data")
     private LocalDateTime data;
@@ -25,14 +24,24 @@ public class Inscricao {
     @JoinColumn(name = "participante_id", nullable = false)
     private Participante participante;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "jogo_id", nullable = false)
+    private Jogo jogo;
 
+    public Jogo getJogo() {
+        return jogo;
+    }
 
+    public void setJogo(Jogo jogo) {
+        this.jogo = jogo;
+    }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -9,6 +9,8 @@ public class InscricaoDTOResponse {
 
     private int status;
 
+    private Integer idParticipante;
+
     public int getId() {
         return id;
     }
@@ -31,5 +33,13 @@ public class InscricaoDTOResponse {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public Integer getIdParticipante() {
+        return idParticipante;
+    }
+
+    public void setIdParticipante(Integer idParticipante) {
+        this.idParticipante = idParticipante;
     }
 }
