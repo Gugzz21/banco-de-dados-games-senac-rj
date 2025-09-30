@@ -79,14 +79,14 @@ public class Usuario {
     }
 
     public String getLogin() {
-        return login;
+        return this.login;
     }
 
     public void setLogin(String login) {
         this.login = login;
     }
 
-    public String getSenha() {
+    public String getSenha(String encode) {
         return senha;
     }
 
