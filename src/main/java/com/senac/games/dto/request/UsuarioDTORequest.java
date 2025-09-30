@@ -58,7 +58,7 @@ public class UsuarioDTORequest {
         this.senha = senha;
     }
 
-    public static List<Role> getRoleList() {
+    public List<String> getRoleList() {
         return roleList;
     }
 
